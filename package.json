@@ -1,13 +1,11 @@
 {
   "name": "habit-api-csv",
   "version": "1.0.0",
-  "description": "API REST de hábitos diarios con CSV y Express",
+  "description": "API REST de hábitos diarios con CSV",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
-  "keywords": [],
-  "author": "",
   "license": "ISC",
   "type": "commonjs",
   "engines": {
