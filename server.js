@@ -144,7 +144,5 @@ app.delete('/habits/:id', async (req, res) => {
 });
 
 // ✅ Escuchar puerto correcto (Railway)
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`✅ Servidor corriendo en puerto ${PORT}`);
-});
+const PORT = process.env.PORT || 4000; // usa 4000 en vez de 3000
+app.listen(PORT, () => console.log(`✅ Servidor corriendo en http://localhost:${PORT}`));
