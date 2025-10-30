@@ -1,0 +1,11 @@
+id,title,description,frequency,streak,lastCompleted,createdAt,updatedAt
+1,Beber agua,Bebe 2 litros de agua al día,daily,3,2025-10-28T00:00:00.000Z,2025-10-25T00:00:00.000Z,2025-10-28T00:00:00.000Z
+2,Hacer ejercicio,Entrena 30 minutos al día,daily,5,2025-10-28T00:00:00.000Z,2025-10-20T00:00:00.000Z,2025-10-28T00:00:00.000Z
+3,Leer un libro,Lee al menos 10 páginas,daily,2,2025-10-27T00:00:00.000Z,2025-10-24T00:00:00.000Z,2025-10-27T00:00:00.000Z
+4,Meditar,Medita por 10 minutos,daily,7,2025-10-28T00:00:00.000Z,2025-10-15T00:00:00.000Z,2025-10-28T00:00:00.000Z
+5,Escribir diario,Anota tus pensamientos del día,daily,1,2025-10-26T00:00:00.000Z,2025-10-26T00:00:00.000Z,2025-10-26T00:00:00.000Z
+6,Aprender inglés,Estudia inglés 15 minutos,daily,4,2025-10-28T00:00:00.000Z,2025-10-22T00:00:00.000Z,2025-10-28T00:00:00.000Z
+7,Caminar,Camina 5.000 pasos diarios,daily,6,2025-10-28T00:00:00.000Z,2025-10-19T00:00:00.000Z,2025-10-28T00:00:00.000Z
+8,No azúcar,Evita bebidas azucaradas,daily,2,2025-10-27T00:00:00.000Z,2025-10-25T00:00:00.000Z,2025-10-27T00:00:00.000Z
+9,Limpiar escritorio,Mantén tu espacio limpio,daily,3,2025-10-28T00:00:00.000Z,2025-10-23T00:00:00.000Z,2025-10-28T00:00:00.000Z
+10,Planificar día,Revisa tareas y agenda,daily,4,2025-10-28T00:00:00.000Z,2025-10-21T00:00:00.000Z,2025-10-28T00:00:00.000Z
