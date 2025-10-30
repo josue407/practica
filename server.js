@@ -1,33 +1,39 @@
+// ==========================================
+// 🌟 API de Hábitos Diarios (CSV + Express)
+// ==========================================
+
 const express = require('express');
 const fs = require('fs').promises;
 const path = require('path');
 const { parse } = require('csv-parse/sync');
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 const { v4: uuidv4 } = require('uuid');
-const cors = require('cors'); // 🔥 Importa CORS para permitir acceso desde PHP u otro dominio
+const cors = require('cors');
 
 const app = express();
 app.use(express.json());
-app.use(cors()); // 🔥 Habilita CORS (importante para tu frontend PHP)
+app.use(cors());
 
 // ==== RUTAS Y ARCHIVOS ====
 const DATA_DIR = path.join(__dirname, 'data');
 const CSV_PATH = path.join(DATA_DIR, 'habits.csv');
 
-const csvWriter = createCsvWriter({
-  path: CSV_PATH,
-  header: [
-    { id: 'id', title: 'id' },
-    { id: 'title', title: 'title' },
-    { id: 'description', title: 'description' },
-    { id: 'frequency', title: 'frequency' },
-    { id: 'streak', title: 'streak' },
-    { id: 'lastCompleted', title: 'lastCompleted' },
-    { id: 'createdAt', title: 'createdAt' },
-    { id: 'updatedAt', title: 'updatedAt' }
-  ],
-  append: false
-});
+// 🧱 Crea CSV Writer dinámico (sin borrar contenido)
+function makeWriter() {
+  return createCsvWriter({
+    path: CSV_PATH,
+    header: [
+      { id: 'id', title: 'id' },
+      { id: 'title', title: 'title' },
+      { id: 'description', title: 'description' },
+      { id: 'frequency', title: 'frequency' },
+      { id: 'streak', title: 'streak' },
+      { id: 'lastCompleted', title: 'lastCompleted' },
+      { id: 'createdAt', title: 'createdAt' },
+      { id: 'updatedAt', title: 'updatedAt' }
+    ]
+  });
+}
 
 // ==== FUNCIONES AUXILIARES ====
 async function ensureCsv() {
@@ -35,7 +41,8 @@ async function ensureCsv() {
   try {
     await fs.access(CSV_PATH);
   } catch {
-    await csvWriter.writeRecords([]); // Crear el CSV vacío si no existe
+    const writer = makeWriter();
+    await writer.writeRecords([]); // Crear CSV vacío si no existe
   }
 }
 
@@ -57,11 +64,13 @@ async function readHabits() {
 }
 
 async function writeHabits(arr) {
-  await ensureCsv();
-  await csvWriter.writeRecords(arr);
+  const writer = makeWriter();
+  await writer.writeRecords(arr);
 }
 
 // ==== RUTAS DE LA API ====
+
+// Página principal
 app.get('/', (req, res) => {
   res.send(`
     <h1 style="font-family:sans-serif; color:#2b6cb0;">✅ API de Hábitos Diarios</h1>
@@ -81,6 +90,7 @@ app.get('/habits', async (req, res) => {
     const habits = await readHabits();
     res.json(habits);
   } catch (err) {
+    console.error("❌ Error al leer hábitos:", err);
     res.status(500).json({ error: 'Error al leer hábitos' });
   }
 });
@@ -110,6 +120,7 @@ app.post('/habits', async (req, res) => {
 
     res.status(201).json(newHabit);
   } catch (err) {
+    console.error("❌ Error al crear hábito:", err);
     res.status(500).json({ error: 'Error al crear hábito' });
   }
 });
@@ -133,6 +144,7 @@ app.put('/habits/:id', async (req, res) => {
     await writeHabits(habits);
     res.json(habits[idx]);
   } catch (err) {
+    console.error("❌ Error al actualizar hábito:", err);
     res.status(500).json({ error: 'Error al actualizar hábito' });
   }
 });
@@ -148,10 +160,11 @@ app.delete('/habits/:id', async (req, res) => {
     await writeHabits(habits);
     res.json({ success: true, removed });
   } catch (err) {
+    console.error("❌ Error al eliminar hábito:", err);
     res.status(500).json({ error: 'Error al eliminar hábito' });
   }
 });
 
 // ==== SERVIDOR ====
 const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => console.log(`✅ Servidor corriendo en http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`✅ Servidor corriendo en puerto ${PORT}`));
