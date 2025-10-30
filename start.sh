@@ -1,7 +1,11 @@
 #!/bin/bash
+# 🚀 Script de inicio para Railway
 
-# Iniciar la API Node.js
-node server.js &
+# Inicia PHP embebido (frontend)
+php -S 0.0.0.0:8080 -t php/ &
 
-# Iniciar el servidor PHP
-php -S 0.0.0.0:$PORT -t public
+# Espera unos segundos
+sleep 3
+
+# Inicia la API de Node.js
+npm start
