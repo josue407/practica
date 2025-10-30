@@ -21,16 +21,13 @@ $apiBase = "https://independent-grace-production.up.railway.app/habits";
       --text: #111827;
       --shadow: 0 6px 18px rgba(0,0,0,0.08);
     }
-
     * { box-sizing: border-box; }
-
     body {
       margin: 0;
       font-family: "Poppins", sans-serif;
       background: var(--light);
       color: var(--text);
     }
-
     header {
       background: var(--primary);
       color: white;
@@ -41,7 +38,6 @@ $apiBase = "https://independent-grace-production.up.railway.app/habits";
       letter-spacing: 0.5px;
       box-shadow: var(--shadow);
     }
-
     main {
       max-width: 950px;
       margin: 40px auto;
@@ -50,41 +46,21 @@ $apiBase = "https://independent-grace-production.up.railway.app/habits";
       box-shadow: var(--shadow);
       padding: 30px;
     }
-
-    h2 {
-      text-align: center;
-      color: var(--primary-dark);
-      margin-bottom: 20px;
-    }
-
+    h2 { text-align: center; color: var(--primary-dark); margin-bottom: 20px; }
     form {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-      margin-bottom: 35px;
+      display: flex; flex-wrap: wrap; gap: 10px;
+      justify-content: center; margin-bottom: 35px;
     }
-
     input, select, button {
-      padding: 10px 12px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      font-size: 1rem;
+      padding: 10px 12px; border-radius: 8px;
+      border: 1px solid var(--border); font-size: 1rem;
       transition: 0.2s;
     }
-
     input:focus, select:focus {
       border-color: var(--primary);
       outline: none;
       box-shadow: 0 0 0 2px rgba(37,99,235,0.2);
     }
-
-    input, select {
-      flex: 1;
-      min-width: 150px;
-      background: #f8fafc;
-    }
-
     button {
       background: var(--primary);
       color: white;
@@ -92,9 +68,7 @@ $apiBase = "https://independent-grace-production.up.railway.app/habits";
       cursor: pointer;
       font-weight: 600;
     }
-
     button:hover { background: var(--primary-dark); }
-
     table {
       width: 100%;
       border-collapse: collapse;
@@ -102,59 +76,35 @@ $apiBase = "https://independent-grace-production.up.railway.app/habits";
       border-radius: 8px;
       overflow: hidden;
     }
-
     th, td {
       padding: 12px;
       border-bottom: 1px solid var(--border);
       text-align: left;
     }
-
     th {
       background: var(--primary);
       color: white;
       text-transform: uppercase;
       font-size: 0.9rem;
     }
-
     tr:nth-child(even) { background: #f3f4f6; }
-
-    .actions {
-      display: flex;
-      gap: 5px;
-    }
-
+    .actions { display: flex; gap: 5px; }
     .actions button {
       padding: 6px 10px;
       border-radius: 5px;
       font-size: 0.9rem;
     }
-
     .update-btn { background: var(--success); }
     .delete-btn { background: var(--danger); }
-
     .alert {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      padding: 14px 22px;
-      border-radius: 8px;
-      color: white;
-      font-weight: 500;
-      display: none;
-      z-index: 100;
-      animation: fadeIn 0.3s ease;
+      position: fixed; top: 20px; right: 20px;
+      padding: 14px 22px; border-radius: 8px;
+      color: white; font-weight: 500;
+      display: none; z-index: 100;
     }
-
     .alert.show { display: block; }
     .alert.success { background: var(--success); }
     .alert.error { background: var(--danger); }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* 📱 RESPONSIVE */
     @media (max-width: 700px) {
       main { padding: 20px; }
       form { flex-direction: column; }
@@ -170,10 +120,7 @@ $apiBase = "https://independent-grace-production.up.railway.app/habits";
         box-shadow: var(--shadow);
       }
       th { display: none; }
-      td {
-        border: none;
-        padding: 8px 0;
-      }
+      td { border: none; padding: 8px 0; }
       td::before {
         content: attr(data-label);
         font-weight: bold;
@@ -219,40 +166,45 @@ $apiBase = "https://independent-grace-production.up.railway.app/habits";
     const API = "<?= $apiBase ?>";
     const alertBox = document.getElementById("alertBox");
 
-    function showAlert(msg, type="success") {
+    function showAlert(msg, type = "success") {
       alertBox.textContent = msg;
       alertBox.className = `alert show ${type}`;
       setTimeout(() => alertBox.classList.remove("show"), 2500);
     }
 
     async function loadHabits() {
-      const res = await fetch(API);
-      const data = await res.json();
-      const tbody = document.querySelector("#habitTable tbody");
-      tbody.innerHTML = "";
+      try {
+        const res = await fetch(API);
+        if (!res.ok) throw new Error("Error al cargar hábitos");
+        const data = await res.json();
 
-      data.forEach(habit => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td data-label="Título">
-            <input type="text" value="${habit.title}" class="edit-title" data-id="${habit.id}">
-          </td>
-          <td data-label="Descripción">
-            <input type="text" value="${habit.description}" class="edit-desc" data-id="${habit.id}">
-          </td>
-          <td data-label="Frecuencia">
-            <select class="edit-freq" data-id="${habit.id}">
-              <option value="daily" ${habit.frequency === "daily" ? "selected" : ""}>Diario</option>
-              <option value="weekly" ${habit.frequency === "weekly" ? "selected" : ""}>Semanal</option>
-            </select>
-          </td>
-          <td data-label="Acciones" class="actions">
-            <button class="update-btn" onclick="updateHabit('${habit.id}')">💾</button>
-            <button class="delete-btn" onclick="deleteHabit('${habit.id}')">🗑</button>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
+        const tbody = document.querySelector("#habitTable tbody");
+        tbody.innerHTML = "";
+
+        data.forEach(habit => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td data-label="Título">
+              <input type="text" value="${habit.title}" class="edit-title" data-id="${habit.id}">
+            </td>
+            <td data-label="Descripción">
+              <input type="text" value="${habit.description}" class="edit-desc" data-id="${habit.id}">
+            </td>
+            <td data-label="Frecuencia">
+              <select class="edit-freq" data-id="${habit.id}">
+                <option value="daily" ${habit.frequency === "daily" ? "selected" : ""}>Diario</option>
+                <option value="weekly" ${habit.frequency === "weekly" ? "selected" : ""}>Semanal</option>
+              </select>
+            </td>
+            <td data-label="Acciones" class="actions">
+              <button class="update-btn" onclick="updateHabit('${habit.id}')">💾</button>
+              <button class="delete-btn" onclick="deleteHabit('${habit.id}')">🗑</button>
+            </td>`;
+          tbody.appendChild(tr);
+        });
+      } catch (err) {
+        showAlert("❌ No se pudo conectar con la API", "error");
+      }
     }
 
     async function createHabit(e) {
@@ -260,20 +212,19 @@ $apiBase = "https://independent-grace-production.up.railway.app/habits";
       const title = document.getElementById("title").value.trim();
       const description = document.getElementById("description").value.trim();
       const frequency = document.getElementById("frequency").value;
-
       if (!title) return showAlert("⚠️ El título es obligatorio", "error");
 
-      const res = await fetch(API, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ title, description, frequency })
-      });
-
-      if (res.ok) {
+      try {
+        const res = await fetch(API, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ title, description, frequency }),
+        });
+        if (!res.ok) throw new Error();
         showAlert("✅ Hábito agregado correctamente");
         document.getElementById("habitForm").reset();
         loadHabits();
-      } else {
+      } catch {
         showAlert("❌ Error al agregar hábito", "error");
       }
     }
@@ -283,23 +234,29 @@ $apiBase = "https://independent-grace-production.up.railway.app/habits";
       const description = document.querySelector(`.edit-desc[data-id='${id}']`).value;
       const frequency = document.querySelector(`.edit-freq[data-id='${id}']`).value;
 
-      const res = await fetch(`${API}/${id}`, {
-        method: "PUT",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ title, description, frequency })
-      });
-
-      if (res.ok) showAlert("✅ Hábito actualizado");
-      else showAlert("❌ Error al actualizar", "error");
+      try {
+        const res = await fetch(`${API}/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ title, description, frequency }),
+        });
+        if (!res.ok) throw new Error();
+        showAlert("✅ Hábito actualizado");
+      } catch {
+        showAlert("❌ Error al actualizar", "error");
+      }
     }
 
     async function deleteHabit(id) {
       if (!confirm("🗑 ¿Seguro que deseas eliminar este hábito?")) return;
-      const res = await fetch(`${API}/${id}`, { method: "DELETE" });
-      if (res.ok) {
+      try {
+        const res = await fetch(`${API}/${id}`, { method: "DELETE" });
+        if (!res.ok) throw new Error();
         showAlert("✅ Hábito eliminado");
         loadHabits();
-      } else showAlert("❌ Error al eliminar", "error");
+      } catch {
+        showAlert("❌ Error al eliminar", "error");
+      }
     }
 
     document.getElementById("habitForm").addEventListener("submit", createHabit);
